@@ -1,23 +1,74 @@
+import Image from 'next/image'
+
 import InformationCardComponent from "@/components/information-card.component";
 import LayoutComponent from "@/components/layout.component";
-import PlantCardComponent from "@/components/plant-card.component";
 import RoundButtonComponent from "@/components/round-button.component";
 import TitleComponent from "@/components/title.component";
 
 import { MdOutlineWaterDrop, MdOutlineDoorSliding } from "react-icons/md";
 import { CiTempHigh } from "react-icons/ci";
 import { HiOutlineSun } from "react-icons/hi";
-import { IoMdClose } from "react-icons/io";
 import { TiWavesOutline } from "react-icons/ti";
 import { GiPaperBagFolded } from "react-icons/gi";
 import TextComponent from "@/components/text.component";
-
-import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react';
+import Head from 'next/head';
 
 
 export default function Index() {
+
+    const ws = useRef<any>();
+
+    const [data, setData] = useState({
+        luz: 'NORMAL', humedad: 50, tempAire: 25, humedadAire: 50
+    });
+
+    useEffect(() => {
+        ws.current = new WebSocket('wss://ws.up.railway.app');
+
+        ws.current.onopen = () => {
+            console.log('WebSocket Client Connected');
+        }
+
+        ws.current.onmessage = (message: any) => {
+            if(!message.data) return;
+
+            const [origin, action, payload] = message.data.split('~');
+
+            if(origin != 'client-web' && action != 'set-data') return;
+
+            let [luz, humedad, tempAire, humedadAire] = payload.split('|');
+
+            if(luz < 100) luz = 'BAJA';
+            else if(luz > 1000) luz = 'ALTA';
+            else luz = 'NORMAL';
+
+            setData({
+                luz, humedad, tempAire, humedadAire
+            });
+        }
+
+        ws.current.onclose = () => {
+            console.log('WebSocket Client Disconnected');
+        }
+
+        return () => {
+            if (ws.current) ws.current.close()
+        }
+    }, [])
+
+    const handlerAction = (action: string) => {
+        return () => {
+            if (ws.current && ws.current.readyState == WebSocket.OPEN) ws.current.send(`client-web~set-action~${action}`);
+        }
+    }
+
     return (
         <LayoutComponent>
+            <Head>
+                <title>Planta | Hydrangea</title>
+            </Head>
+
             <div className="relative">
 
                 <div className="w-full aspect-square relative">
@@ -25,19 +76,19 @@ export default function Index() {
                 </div>
 
                 <div className="bg-white relative bottom-8 rounded-t-3xl p-6">
-                    <TitleComponent className="mb-4">Filodendro Atom</TitleComponent>
+                    <TitleComponent className="mb-4">Hydrangea</TitleComponent>
                     <div className="grid grid-rows-2 grid-cols-2 gap-3">
-                        <InformationCardComponent icon={HiOutlineSun} title="LUZ" description="ALTA" />
-                        <InformationCardComponent icon={MdOutlineWaterDrop} title="HUMEDAD" description="50%" />
-                        <InformationCardComponent icon={CiTempHigh} title="TEMP. AIRE" description="32 °C" iconSize={29} />
-                        <InformationCardComponent icon={MdOutlineWaterDrop} title="HUMEDAD AIRE" description="15%" />
+                        <InformationCardComponent icon={HiOutlineSun} title="LUZ" description={data.luz} />
+                        <InformationCardComponent icon={MdOutlineWaterDrop} title="HUMEDAD" description={`${data.humedad} %`} />
+                        <InformationCardComponent icon={CiTempHigh} title="TEMP. AIRE" description={`${data.tempAire} °C`} iconSize={29} />
+                        <InformationCardComponent icon={MdOutlineWaterDrop} title="HUMEDAD AIRE" description={`${data.humedadAire} %`} />
                     </div>
                     <TextComponent className="mt-5 mb-4">Acciones</TextComponent>
                     <div className="flex justify-around gap-2">
-                        <RoundButtonComponent icon={MdOutlineWaterDrop} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Regar"/>
-                        <RoundButtonComponent icon={GiPaperBagFolded} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Abono"/>
-                        <RoundButtonComponent icon={TiWavesOutline} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Ventilar"/>
-                        <RoundButtonComponent icon={MdOutlineDoorSliding} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Puertas"/>
+                        <RoundButtonComponent onClick={handlerAction('regar')} icon={MdOutlineWaterDrop} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Regar"/>
+                        <RoundButtonComponent onClick={handlerAction('abono')} icon={GiPaperBagFolded} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Abono"/>
+                        <RoundButtonComponent onClick={handlerAction('ventilar')} icon={TiWavesOutline} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Ventilar"/>
+                        <RoundButtonComponent onClick={handlerAction('puertas')} icon={MdOutlineDoorSliding} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Puertas"/>
                     </div>
 
                     <TextComponent className="mt-10 mb-0 text-center font-bold">SISTEMAS TELEFONICOS PIA</TextComponent>
