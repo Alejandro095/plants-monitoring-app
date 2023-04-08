@@ -20,7 +20,7 @@ export default function Index() {
     const ws = useRef<any>();
 
     const [data, setData] = useState({
-        luz: 'NORMAL', humedad: 50, tempAire: 25, humedadAire: 50
+        luz: '0.00', humedad: '0.00', tempAire: '0.00', humedadAire: '0.00'
     });
 
     useEffect(() => {
@@ -39,12 +39,11 @@ export default function Index() {
 
             let [luz, humedad, tempAire, humedadAire] = payload.split('|');
 
-            if(luz < 100) luz = 'BAJA';
-            else if(luz > 1000) luz = 'ALTA';
-            else luz = 'NORMAL';
-
             setData({
-                luz, humedad, tempAire, humedadAire
+                luz: Number(luz).toFixed(2),
+                humedad: Number(humedad).toFixed(2),
+                tempAire: Number(tempAire).toFixed(2),
+                humedadAire: Number(humedadAire).toFixed(2)
             });
         }
 
@@ -78,7 +77,7 @@ export default function Index() {
                 <div className="bg-white relative bottom-8 rounded-t-3xl p-6">
                     <TitleComponent className="mb-4">Hydrangea</TitleComponent>
                     <div className="grid grid-rows-2 grid-cols-2 gap-3">
-                        <InformationCardComponent icon={HiOutlineSun} title="LUZ" description={data.luz} />
+                        <InformationCardComponent icon={HiOutlineSun} title="LUZ" description={`${data.luz} %`} />
                         <InformationCardComponent icon={MdOutlineWaterDrop} title="HUMEDAD" description={`${data.humedad} %`} />
                         <InformationCardComponent icon={CiTempHigh} title="TEMP. AIRE" description={`${data.tempAire} °C`} iconSize={29} />
                         <InformationCardComponent icon={MdOutlineWaterDrop} title="HUMEDAD AIRE" description={`${data.humedadAire} %`} />
