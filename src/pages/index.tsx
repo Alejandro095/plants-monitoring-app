@@ -65,17 +65,17 @@ export default function Index() {
     return (
         <LayoutComponent>
             <Head>
-                <title>Planta | Hydrangea</title>
+                <title>Planta | Girasol</title>
             </Head>
 
             <div className="relative">
 
                 <div className="w-full aspect-square relative">
-                    <Image src="/plant.webp" alt="Imagen de una planta" fill style={{ objectFit: 'cover',  objectPosition: 'center'}}/>
+                    <Image src="/plant.jpg" alt="Imagen de una planta" fill style={{ objectFit: 'cover',  objectPosition: 'center'}}/>
                 </div>
 
                 <div className="bg-white relative bottom-8 rounded-t-3xl p-6">
-                    <TitleComponent className="mb-4">Hydrangea</TitleComponent>
+                    <TitleComponent className="mb-4">Girasol</TitleComponent>
                     <div className="grid grid-rows-2 grid-cols-2 gap-3">
                         <InformationCardComponent icon={HiOutlineSun} title="LUZ" description={`${data.luz} %`} />
                         <InformationCardComponent icon={MdOutlineWaterDrop} title="HUMEDAD" description={`${data.humedad} %`} />
