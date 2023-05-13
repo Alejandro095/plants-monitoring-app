@@ -84,10 +84,10 @@ export default function Index() {
                     </div>
                     <TextComponent className="mt-5 mb-4">Acciones</TextComponent>
                     <div className="flex justify-around gap-2">
-                        <RoundButtonComponent onClick={handlerAction('regar')} icon={MdOutlineWaterDrop} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Regar"/>
-                        <RoundButtonComponent onClick={handlerAction('abono')} icon={GiPaperBagFolded} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Abono"/>
-                        <RoundButtonComponent onClick={handlerAction('ventilar')} icon={TiWavesOutline} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Ventilar"/>
                         <RoundButtonComponent onClick={handlerAction('puertas')} icon={MdOutlineDoorSliding} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Puertas"/>
+                        <RoundButtonComponent onClick={handlerAction('ventilar')} icon={TiWavesOutline} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Ventilar"/>
+                        <RoundButtonComponent onClick={handlerAction('abono')} icon={GiPaperBagFolded} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Abono"/>
+                        <RoundButtonComponent onClick={handlerAction('regar')} icon={MdOutlineWaterDrop} backgroundColor="bg-slate-200/75" iconColor="fill-slate-500/80" labeColor="text-slate-600" label="Regar"/>
                     </div>
 
                     <TextComponent className="mt-10 mb-0 text-center font-bold">SISTEMAS TELEFONICOS PIA</TextComponent>
