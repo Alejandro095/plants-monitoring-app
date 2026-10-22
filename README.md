@@ -4,6 +4,10 @@ Web application for an IoT plant monitoring and care system, developed as the fi
 
 The system monitors a plant's environment through sensors connected to an ESP32 and lets the user check its status and act on it remotely. This application is the user-facing layer: it shows the sensor readings in real time and sends the user's actions to the device through a WebSocket server.
 
+<p align="center">
+  <img src="assets/mobile.png" alt="Plant monitoring dashboard on a mobile phone" width="320">
+</p>
+
 ## Project architecture
 
 The solution is split into three repositories, one for each layer of the system:
@@ -49,6 +53,10 @@ Since the server keeps the latest reading in memory, the dashboard shows the cur
 Before sending, the app checks that the connection is open, so a command is never written to a closed socket.
 
 **Mobile-first design.** The interface is built as a mobile app: full screen on phones and a centered, card-style view on larger screens. It is composed of small reusable components (information cards, round action buttons, typography and layout) styled with Tailwind CSS.
+
+<p align="center">
+  <img src="assets/desktop.png" alt="Plant monitoring dashboard on a desktop browser" width="800">
+</p>
 
 **Multi-user.** Every connected client receives the same broadcast, so several people can watch and control the plant at the same time.
 
